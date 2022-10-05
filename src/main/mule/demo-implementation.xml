@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracing="http://www.mulesoft.org/schema/mule/tracing" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/tracing http://www.mulesoft.org/schema/mule/tracing/current/mule-tracing.xsd">
+	<sub-flow name="demo-implementationSub_Flow" doc:id="7f7a1128-2bc2-4a8f-b7ec-2180ff09e66a" >
+		<logger level="INFO" doc:name="Logger" doc:id="37c780e3-89e5-4371-8267-620c9fb081aa" message="#[vars.firstName ++  vars.surName]" />
+		<set-variable value="#[p('sqlQuery')]" doc:name="Set Variable" doc:id="0fd48ded-fd5f-4eed-a03a-29064f5fedfa" variableName="sqlQuery"/>
+		<set-payload value="#[((vars.sqlQuery default '') replace 'firstName' with ('&quot;' ++ vars.firstName as String ++ '&quot;')) replace 'lastName' with('&quot;' ++ vars.surName as String ++ '&quot;')]" doc:name="Set Payload" doc:id="c95e9b54-d876-4e88-a4db-61a6aa9a8a05" />
+		<db:insert doc:id="1e893f6b-b5ba-4d47-b15b-edbab1459c8e" config-ref="Database_Config1">
+			<db:sql ><![CDATA[#[payload]]]></db:sql>
+		</db:insert>
+		<logger level="INFO" doc:name="Logger" doc:id="473277d3-42a5-48d1-a96c-cfb9c48dfd22" message="#[payload]"/>
+	</sub-flow>
+</mule>
